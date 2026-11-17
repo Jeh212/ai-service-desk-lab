@@ -1,8 +1,8 @@
 // Typed client for the AI Service Desk API.
 //
-// Types are hand-written to mirror the backend Pydantic contracts. For a fully
-// generated client, run `npm run gen:api` (openapi-typescript against the live
-// /openapi.json) — see README. We keep this thin client for reliability and to
+// Types are hand-written to mirror the backend Zod contracts. For a fully
+// generated client, use openapi-typescript against the live /openapi.json.
+// We keep this thin client for reliability and to
 // avoid a codegen step just to study the app.
 
 import { getToken } from "./session";

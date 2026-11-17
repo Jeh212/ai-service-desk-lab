@@ -17,11 +17,11 @@ Implement the full tool-calling cycle with a guarded dispatcher, and build a
   staff queue.
 
 ## 3. Files involved
-- `app/ai/tools/registry.py` — definitions, handlers, `build_registry`.
-- `app/ai/tools/dispatcher.py` — the 7-step guarded path.
-- `app/ai/tools/schemas.py` — argument validation + JSON Schema.
-- `app/ai/orchestrator.py` — `_agent_loop`, `ALLOWED_TOOLS`, confirm/execute.
-- `app/domain/subscriptions/service.py` — deterministic cancellation.
+- `src/ai/tools.ts` — definitions, handlers, `buildRegistry`.
+- `src/ai/tools.ts` — the 7-step guarded path.
+- `src/ai/tools.ts` — argument validation + JSON Schema.
+- `src/ai/orchestrator.ts` — bounded loop and confirmation; `src/ai/intents.ts` — `ALLOWED_TOOLS`.
+- `src/domain/services.ts` — deterministic cancellation.
 
 ## 4. How the flow works
 Per intent, `ALLOWED_TOOLS` restricts the tool set offered to the model. The loop
@@ -32,7 +32,7 @@ produces a proposal; `Orchestrator.confirm` executes deterministically.
 ## 5. Practical exercise
 Exercise the guard rails:
 1. In the **Tool Registry**, read each tool’s roles and possible errors.
-2. Write a unit test (see `tests/unit/test_dispatcher.py`) that calls
+2. Write a unit test (see `test/dispatcher-orchestrator.test.ts`) that calls
    `get_billing_history` with `limit=999` and assert `tool_args_invalid`.
 3. Add a new read-only tool (e.g. `get_plan_catalog`), register it, allow it for
    an intent, and add an eval case asserting it’s called.

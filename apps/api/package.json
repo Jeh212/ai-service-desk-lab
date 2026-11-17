@@ -1,0 +1,39 @@
+{
+  "name": "@ai-service-desk/api",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node --watch --import tsx src/server.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/server.js",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test test/*.test.ts",
+    "test:mongo": "node --import tsx --test test/mongo.integration.ts",
+    "seed": "node --import tsx src/cli/seed.ts",
+    "reset": "node --import tsx src/cli/reset.ts",
+    "eval": "node --import tsx src/cli/evaluate.ts",
+    "format": "prettier --write src test",
+    "lint": "tsc --noEmit && prettier --check src test"
+  },
+  "dependencies": {
+    "fastify": "^5.6.0",
+    "@fastify/cors": "^11.1.0",
+    "@fastify/swagger": "^9.5.1",
+    "@fastify/swagger-ui": "^5.2.3",
+    "mongodb": "^6.20.0",
+    "groq-sdk": "^0.37.0",
+    "dotenv": "^17.2.3",
+    "zod": "^3.25.76",
+    "zod-to-json-schema": "^3.24.6"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "tsx": "^4.20.6",
+    "@types/node": "^22.18.0",
+    "prettier": "^3.6.2"
+  }
+}

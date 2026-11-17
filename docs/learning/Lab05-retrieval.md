@@ -13,15 +13,15 @@ understand where semantic retrieval would slot in without a rewrite.
   the KB informs explanations.
 
 ## 3. Files involved
-- `app/domain/support/service.py` — `KnowledgeService.search`.
-- `app/repositories/repos.py` — `KnowledgeRepo.search` (query + indexes).
-- `app/ai/tools/registry.py` — the `search_knowledge_base` tool.
-- `app/seeds.py` — seeded articles per tenant.
+- `src/domain/services.ts` — `Services.searchKnowledge`.
+- `src/repositories/store.ts` — MongoDB queries and indexes.
+- `src/ai/tools.ts` — the `search_knowledge_base` tool.
+- `src/seeds.ts` — seeded articles per tenant.
 
 ## 4. How the flow works
 For `general_support` (and optionally `cancellation_info`), the model may call
-`search_knowledge_base`. The handler calls `KnowledgeService.search`, scoped to
-`auth.org_id` and `published=True`, returning the top matches to the model.
+`search_knowledge_base`. The handler calls `Services.searchKnowledge`, scoped to
+`auth.org_id` and `published: true`, returning the top matches to the model.
 
 ## 5. Practical exercise
 Study isolation and retrieval quality:
@@ -45,7 +45,7 @@ answer cites retrieved content.
 
 ## 8. Review questions
 1. Why start with deterministic retrieval instead of embeddings?
-2. How is cross-tenant leakage prevented in `KnowledgeRepo.search`?
+2. How is cross-tenant leakage prevented in `Services.searchKnowledge`?
 3. What failure modes appear once you add semantic retrieval (and how to detect)?
 
 ## 9. Possible next improvements
