@@ -7,8 +7,8 @@ and when (not) to fine-tune or add agentic complexity.
 ## 2. Key concepts
 - **Model comparison.** Run the same dataset across models with identical graders
   and compare metrics.
-- **Fallback strategies.** Degrade safely: mock when the provider is down; retry
-  with backoff; abstain when uncertain.
+- **Fallback strategies.** Degrade safely: bounded retries and explicit abstention.
+  Mock mode is an explicit configuration choice, never an automatic fallback.
 - **LLM-as-a-judge.** For open-ended answers, use a model to grade with a rubric
   — carefully, with its own evaluation.
 - **Fine-tuning: when to avoid.** Prefer prompts, contracts and tools first;
@@ -17,19 +17,20 @@ and when (not) to fine-tune or add agentic complexity.
   can’t express the task.
 
 ## 3. Files involved
-- `app/ai/providers/base.py`, `factory.py` — the provider abstraction + switch.
-- `app/ai/providers/groq_provider.py`, `mock.py` — two implementations.
-- `app/ai/evaluation/runner.py` — `run(provider_name=...)` for comparison.
+- `src/ai/providers.ts` — the provider abstraction + switch.
+- `src/ai/providers.ts` — two implementations.
+- `src/ai/evaluation.ts` — `runEvaluation(dataset, settings, {provider})` for comparison.
 
 ## 4. How the flow works
-`build_provider(settings)` is the single switch. The evaluation runner accepts a
-`provider_name`, so the same dataset and graders run against mock or Groq (and,
+`buildProvider(settings)` is the single switch. The evaluation runner accepts a
+`provider`, so the same dataset and graders run against mock or Groq (and,
 later, additional providers) for apples-to-apples comparison.
 
 ## 5. Practical exercise
 Compare two models (needs a Groq key):
 1. Set `GROQ_MODEL=llama-3.1-8b-instant`, run `make eval PROVIDER=groq`.
-2. Change `GROQ_MODEL` to another available model, run again.
+2. Change `GROQ_MODEL` for tool calls and `GROQ_STRUCTURED_MODEL` for intent
+   classification, then run again.
 3. Compare runs in **Evaluation Runs**; note where accuracy/latency/abstention
    differ by tag. Decide which model you’d ship and why.
 

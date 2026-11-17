@@ -46,7 +46,7 @@ export default function LabDashboard() {
       <div className="grid gap-3 md:grid-cols-3">
         {[
           ["/lab/intents", "Intent Explorer", "Versioned intent taxonomy + allowed tools."],
-          ["/lab/contracts", "Contracts Explorer", "Real Pydantic schemas + valid/invalid examples."],
+          ["/lab/contracts", "Contracts Explorer", "Real Zod schemas + valid/invalid examples."],
           ["/lab/tools", "Tool Registry", "Catalog, parameters, permissions, handlers."],
           ["/lab/traces", "Trace Viewer", "Step-by-step view of each request."],
           ["/lab/evals", "Evaluation Runs", "Run datasets on mock or Groq; compare runs."],

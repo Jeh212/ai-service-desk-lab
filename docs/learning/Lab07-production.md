@@ -17,15 +17,15 @@ resistance, cost/latency awareness and reliability.
   accounting, bounded retries honoring `Retry-After`, iteration limits.
 
 ## 3. Files involved
-- `app/ai/observability/trace.py` — `Trace`, `StepTimer`, redaction.
-- `app/core/logging.py` — structured logs + `redact`.
-- `app/core/errors.py` — the error-code catalog and HTTP mapping.
-- `app/ai/providers/groq_provider.py` — timeout/429/backoff handling.
+- `src/ai/trace.ts` — `Trace`, timing, redaction.
+- `src/ai/trace.ts` — structured logs + `redact`.
+- `src/core/errors.ts` — the error-code catalog and HTTP mapping.
+- `src/ai/providers.ts` — timeout/429/backoff handling.
 - Lab pages: **Trace Viewer**, **Observability**.
 
 ## 4. How the flow works
-Every step is timed and recorded via `StepTimer`/`Trace.add`; the trace persists
-to MongoDB and surfaces in the Trace Viewer. `Orchestrator._provider_failure`
+Every step is timed and recorded via `performance.now()`/`Trace.add`; the trace persists
+to MongoDB and surfaces in the Trace Viewer. `Orchestrator.handleMessage`
 converts provider errors into a safe, explained `error` state.
 
 ## 5. Practical exercise

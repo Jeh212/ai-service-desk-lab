@@ -1,0 +1,298 @@
+{
+  "organizations": [
+    {
+      "org_id": "org_acme",
+      "name": "Acme SaaS",
+      "created_at": "2026-01-01T00:00:00Z"
+    },
+    {
+      "org_id": "org_globex",
+      "name": "Globex Cloud",
+      "created_at": "2026-01-01T00:00:00Z"
+    }
+  ],
+  "users": [
+    {
+      "user_id": "user_alice",
+      "org_id": "org_acme",
+      "email": "alice@example.com",
+      "name": "Alice Customer",
+      "roles": ["customer"],
+      "demo_login_code": "alice-acme"
+    },
+    {
+      "user_id": "user_bob",
+      "org_id": "org_acme",
+      "email": "bob@example.com",
+      "name": "Bob Customer",
+      "roles": ["customer"],
+      "demo_login_code": "bob-acme"
+    },
+    {
+      "user_id": "user_carol",
+      "org_id": "org_globex",
+      "email": "carol@example.com",
+      "name": "Carol Customer",
+      "roles": ["customer"],
+      "demo_login_code": "carol-globex"
+    },
+    {
+      "user_id": "user_dave",
+      "org_id": "org_acme",
+      "email": "dave@example.com",
+      "name": "Dave Agent",
+      "roles": ["customer", "agent"],
+      "demo_login_code": "dave-acme"
+    }
+  ],
+  "plans": [
+    {
+      "plan_id": "org_acme_basic",
+      "org_id": "org_acme",
+      "code": "BASIC",
+      "name": "Acme Basic",
+      "price_cents": 1900,
+      "currency": "USD",
+      "billing_period": "monthly",
+      "features": ["1 seat", "email support"]
+    },
+    {
+      "plan_id": "org_acme_pro",
+      "org_id": "org_acme",
+      "code": "PRO",
+      "name": "Acme Pro",
+      "price_cents": 4900,
+      "currency": "USD",
+      "billing_period": "monthly",
+      "features": ["5 seats", "priority support", "analytics"]
+    },
+    {
+      "plan_id": "org_globex_basic",
+      "org_id": "org_globex",
+      "code": "BASIC",
+      "name": "Globex Basic",
+      "price_cents": 2500,
+      "currency": "USD",
+      "billing_period": "monthly",
+      "features": ["1 seat"]
+    },
+    {
+      "plan_id": "org_globex_pro",
+      "org_id": "org_globex",
+      "code": "PRO",
+      "name": "Globex Pro",
+      "price_cents": 5900,
+      "currency": "USD",
+      "billing_period": "monthly",
+      "features": ["10 seats", "SLA"]
+    }
+  ],
+  "subscriptions": [
+    {
+      "subscription_id": "sub_alice_pro",
+      "org_id": "org_acme",
+      "user_id": "user_alice",
+      "plan_code": "PRO",
+      "status": "active",
+      "started_at": "2025-12-22T00:00:00Z",
+      "current_period_end": "2026-01-21T00:00:00Z",
+      "cancelled_at": null,
+      "cancel_effective_at": null
+    },
+    {
+      "subscription_id": "sub_bob_basic",
+      "org_id": "org_acme",
+      "user_id": "user_bob",
+      "plan_code": "BASIC",
+      "status": "cancelled",
+      "started_at": "2025-09-03T00:00:00Z",
+      "current_period_end": "2025-12-27T00:00:00Z",
+      "cancelled_at": "2025-11-27T00:00:00Z",
+      "cancel_effective_at": null
+    },
+    {
+      "subscription_id": "sub_carol_basic",
+      "org_id": "org_globex",
+      "user_id": "user_carol",
+      "plan_code": "BASIC",
+      "status": "active",
+      "started_at": "2025-11-22T00:00:00Z",
+      "current_period_end": "2026-01-21T00:00:00Z",
+      "cancelled_at": null,
+      "cancel_effective_at": null
+    }
+  ],
+  "policies": [
+    {
+      "policy_id": "org_acme_cancel_v2",
+      "org_id": "org_acme",
+      "kind": "cancellation",
+      "version": 2,
+      "notice_days": 0,
+      "refund_window_days": 14,
+      "prorate_refund": true,
+      "cancellation_fee_cents": 0,
+      "summary": "Cancel anytime, effective immediately. Prorated refund within 14 days."
+    },
+    {
+      "policy_id": "org_acme_refund_v1",
+      "org_id": "org_acme",
+      "kind": "refund",
+      "version": 1,
+      "notice_days": 0,
+      "refund_window_days": 14,
+      "prorate_refund": false,
+      "cancellation_fee_cents": 0,
+      "summary": "Refunds within 14 days are reviewed by a specialist."
+    },
+    {
+      "policy_id": "org_globex_cancel_v1",
+      "org_id": "org_globex",
+      "kind": "cancellation",
+      "version": 1,
+      "notice_days": 30,
+      "refund_window_days": 0,
+      "prorate_refund": false,
+      "cancellation_fee_cents": 500,
+      "summary": "30-day notice; cancellation effective at period end. Early-exit fee applies."
+    },
+    {
+      "policy_id": "org_globex_refund_v1",
+      "org_id": "org_globex",
+      "kind": "refund",
+      "version": 1,
+      "notice_days": 0,
+      "refund_window_days": 0,
+      "prorate_refund": false,
+      "cancellation_fee_cents": 0,
+      "summary": "No self-serve refunds; every refund is handled by a human."
+    }
+  ],
+  "billing": [
+    {
+      "charge_id": "chg_alice_1",
+      "org_id": "org_acme",
+      "user_id": "user_alice",
+      "subscription_id": "sub_alice_pro",
+      "amount_cents": 4900,
+      "currency": "USD",
+      "description": "Acme Pro \u2014 monthly",
+      "status": "paid",
+      "created_at": "2025-12-22T00:00:00Z"
+    },
+    {
+      "charge_id": "chg_alice_0",
+      "org_id": "org_acme",
+      "user_id": "user_alice",
+      "subscription_id": "sub_alice_pro",
+      "amount_cents": 4900,
+      "currency": "USD",
+      "description": "Acme Pro \u2014 monthly",
+      "status": "paid",
+      "created_at": "2025-11-22T00:00:00Z"
+    },
+    {
+      "charge_id": "chg_carol_1",
+      "org_id": "org_globex",
+      "user_id": "user_carol",
+      "subscription_id": "sub_carol_basic",
+      "amount_cents": 2500,
+      "currency": "USD",
+      "description": "Globex Basic \u2014 monthly",
+      "status": "paid",
+      "created_at": "2025-12-22T00:00:00Z"
+    }
+  ],
+  "knowledge": [
+    {
+      "doc_id": "kb_acme_cancel",
+      "org_id": "org_acme",
+      "title": "How cancellation works",
+      "category": "cancellation",
+      "content": "You can cancel your Acme plan anytime. Cancellation is effective immediately and you may be eligible for a prorated refund if within 14 days of your last charge.",
+      "version": 1,
+      "published": true,
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    },
+    {
+      "doc_id": "kb_acme_refund",
+      "org_id": "org_acme",
+      "title": "Refund policy",
+      "category": "refund",
+      "content": "Refund requests within 14 days are reviewed by a specialist before any money is returned.",
+      "version": 1,
+      "published": true,
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    },
+    {
+      "doc_id": "kb_acme_plans",
+      "org_id": "org_acme",
+      "title": "Plans and pricing",
+      "category": "plans",
+      "content": "Acme Basic is $19/mo (1 seat). Acme Pro is $49/mo (5 seats, analytics, priority support).",
+      "version": 1,
+      "published": true,
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    },
+    {
+      "doc_id": "kb_globex_cancel",
+      "org_id": "org_globex",
+      "title": "Cancellation terms",
+      "category": "cancellation",
+      "content": "Globex requires 30 days notice. Cancellation takes effect at the end of the billing period and an early-exit fee may apply.",
+      "version": 1,
+      "published": true,
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  ],
+  "conversations": [
+    {
+      "conversation_id": "conv_demo_alice",
+      "org_id": "org_acme",
+      "user_id": "user_alice",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What plan am I on?",
+          "created_at": "2026-01-01T00:00:00Z",
+          "intent": null,
+          "correlation_id": null
+        },
+        {
+          "role": "assistant",
+          "content": "You're on Acme Pro ($49/mo).",
+          "created_at": "2026-01-01T00:00:00Z",
+          "intent": null,
+          "correlation_id": null
+        }
+      ],
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  ],
+  "proposals": [],
+  "reviews": [
+    {
+      "review_id": "rev_demo_refund",
+      "org_id": "org_acme",
+      "user_id": "user_bob",
+      "conversation_id": null,
+      "reason": "refund_request",
+      "summary": "Customer Bob requested a refund for his final BASIC charge.",
+      "context": {},
+      "status": "pending",
+      "created_at": "2026-01-01T00:00:00+00:00",
+      "decided_at": null,
+      "decided_by": null,
+      "decision_note": null
+    }
+  ],
+  "audit": [],
+  "traces": [],
+  "eval_runs": [],
+  "eval_cases": []
+}

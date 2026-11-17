@@ -18,14 +18,14 @@ Work them in order; each builds on the last.
 
 | Lab | Topic | Core files |
 |-----|-------|------------|
-| [Lab 01](Lab01-lifecycle.md) | AI Product Engineering lifecycle | `app/main.py`, `app/core/*`, `app/ai/orchestrator.py` |
-| [Lab 02](Lab02-contracts.md) | AI contracts | `app/contracts/*` |
-| [Lab 03](Lab03-prompts.md) | Prompt engineering | `app/ai/prompts/library.py`, `app/ai/intents/*` |
-| [Lab 04](Lab04-evaluation.md) | Evaluation engineering | `app/ai/evaluation/*`, `datasets/*` |
-| [Lab 05](Lab05-retrieval.md) | Retrieval & RAG | `app/domain/support/service.py`, `app/repositories/*` |
-| [Lab 06](Lab06-tools-agents.md) | Tool calling & agents | `app/ai/tools/*`, `app/ai/orchestrator.py` |
-| [Lab 07](Lab07-production.md) | Production AI | `app/ai/observability/*`, `app/core/errors.py` |
-| [Lab 08](Lab08-advanced.md) | Advanced experiments | `app/ai/providers/*`, `app/ai/evaluation/runner.py` |
+| [Lab 01](Lab01-lifecycle.md) | AI Product Engineering lifecycle | `src/app.ts`, `src/core/*`, `src/ai/orchestrator.ts` |
+| [Lab 02](Lab02-contracts.md) | AI contracts | `src/contracts/index.ts` |
+| [Lab 03](Lab03-prompts.md) | Prompt engineering | `src/ai/prompts.ts`, `src/ai/intents.ts` |
+| [Lab 04](Lab04-evaluation.md) | Evaluation engineering | `src/ai/evaluation.ts`, `datasets/*` |
+| [Lab 05](Lab05-retrieval.md) | Retrieval & RAG | `src/domain/services.ts`, `src/repositories/*` |
+| [Lab 06](Lab06-tools-agents.md) | Tool calling & agents | `src/ai/tools.ts`, `src/ai/orchestrator.ts` |
+| [Lab 07](Lab07-production.md) | Production AI | `src/ai/trace.ts`, `src/core/errors.ts` |
+| [Lab 08](Lab08-advanced.md) | Advanced experiments | `src/ai/providers.ts`, `src/ai/evaluation.ts` |
 
 > Tip: keep `make test` and `make eval` handy — the fastest feedback loop in the
 > lab is “change behaviour, run the evals, read what moved.”

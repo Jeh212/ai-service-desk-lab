@@ -1,0 +1,72 @@
+{
+  "definitions": {
+    "get_subscription": "The user wants to see details or status of their own subscription or plan (e.g. 'what plan am I on?', 'when does my subscription renew?').",
+    "cancellation_info": "The user is ASKING ABOUT how cancellation works, the policy, notice periods or consequences. This is a QUESTION, not a request to cancel now (e.g. 'how do I cancel?', 'what happens if I cancel?').",
+    "cancel_subscription": "The user is explicitly requesting to cancel their subscription NOW (e.g. 'cancel my plan', 'I want to cancel today'). This is an ACTION request.",
+    "request_refund": "The user wants money back for a past charge (e.g. 'I want a refund', 'please refund my last payment'). Refunds always route to human review.",
+    "billing_question": "The user has a question about charges, invoices or payment history (e.g. 'why was I charged $x?', 'show my last invoices').",
+    "general_support": "A general product/support question answerable from the knowledge base that does not fit the more specific intents.",
+    "other": "Out of scope, greetings, or anything that does not match the above."
+  },
+  "_SYSTEM_PROMPTS": {
+    "system-v1": "You are the AI assistant for a SaaS service desk. Help customers with subscriptions, billing and cancellations. Use the provided tools to fetch data. Never make up account details.",
+    "system-v2": "You are the AI assistant for a SaaS company's service desk.\nRules you must always follow:\n1. Only use the provided tools to read or change account data. Never invent subscription, billing or policy details.\n2. To cancel a subscription you may only PREPARE a cancellation (prepare_cancellation). You must NOT and CANNOT execute the final cancellation yourself — the customer confirms it and the backend performs it.\n3. Answering a question about how cancellation works is NOT a request to cancel. Do not prepare a cancellation for an informational question.\n4. Refund requests and anything you are unsure is eligible must be routed to a human with request_human_review. Never promise a refund yourself.\n5. Be concise, accurate and explain the terms you retrieved.\n6. If a tool returns an error, explain it plainly and never pretend the action succeeded."
+  },
+  "_CLASSIFIER_PROMPTS": {
+    "classify-v1": "Classify the user's latest message into one intent. Respond with JSON {{\"intent\": ..., \"needs_clarification\": bool, \"rationale\": str}}.\nIntents:\n{definitions}",
+    "classify-v2": "You are an intent classifier for a SaaS service desk.\nClassify ONLY the user's latest message into exactly one intent.\n\nIntents:\n{definitions}\n\nCritical distinction: an informational QUESTION about cancellation (cancellation_info) is different from an explicit REQUEST to cancel now (cancel_subscription). When unsure, prefer the informational intent and set needs_clarification=true.\n\nRespond with ONLY a JSON object with keys: intent (one of the values above), needs_clarification (boolean), rationale (short string), confidence (0..1)."
+  },
+  "_CLASSIFIER_FEWSHOT": [
+    ["How does cancellation work?", "cancellation_info"],
+    ["What happens if I cancel my plan?", "cancellation_info"],
+    ["I want to cancel my subscription now", "cancel_subscription"],
+    ["Please cancel my plan today", "cancel_subscription"],
+    ["I'd like a refund for last month", "request_refund"],
+    ["What plan am I on?", "get_subscription"],
+    ["Why was I charged twice?", "billing_question"]
+  ],
+  "_ACTION_CUES": [
+    "quero cancelar",
+    "cancele",
+    "cancela minha",
+    "cancelar minha assinatura agora",
+    "cancelar agora",
+    "cancel my",
+    "cancel now",
+    "please cancel",
+    "i want to cancel",
+    "want to cancel",
+    "go ahead and cancel"
+  ],
+  "_QUESTION_CUES": [
+    "como",
+    "how",
+    "what",
+    "qual",
+    "por que",
+    "why",
+    "?",
+    "funciona",
+    "policy",
+    "política"
+  ],
+  "_REFUND": ["reembolso", "refund", "money back", "estorno", "devolv"],
+  "_BILLING": [
+    "cobran",
+    "fatura",
+    "invoice",
+    "charge",
+    "billing",
+    "cobrado",
+    "pagamento",
+    "payment"
+  ],
+  "_SUBSCRIPTION": [
+    "assinatura",
+    "subscription",
+    "plano",
+    "plan",
+    "renova",
+    "renew"
+  ]
+}

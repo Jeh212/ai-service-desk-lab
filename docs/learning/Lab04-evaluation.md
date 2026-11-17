@@ -17,16 +17,16 @@ guardrails — not naive string matching.
   latency, tokens.
 
 ## 3. Files involved
-- `app/ai/evaluation/runner.py` — loading, running, grading, metrics, tags.
-- `app/contracts/evaluation.py` — `EvalCase`, `EvalExpectation`, `EvalRunReport`.
+- `src/ai/evaluation.ts` — loading, running, grading, metrics, tags.
+- `src/contracts/index.ts` — `EvalCase`, `EvalExpectation`, `EvalDataset`.
 - `datasets/service_desk_v1.json` — the versioned dataset.
-- `tests/evals/test_eval_regression.py` — the regression gate (must stay green).
+- `test/providers-evals.test.ts` — the regression gate (must stay green).
 
 ## 4. How the flow works
-`EvaluationRunner.run` seeds a fresh DB, builds the chosen provider, and runs
-cases through `Orchestrator.handle_message`. Each response is graded by
-`_check_case`; `_compute_metrics` aggregates; results persist to `eval_runs` and
-to `apps/api/reports/<run_id>.json`.
+`runEvaluation` seeds a fresh DB, builds the chosen provider, and runs
+cases through `Orchestrator.handleMessage`. Each response is graded by
+`checkCase`; `computeMetrics` aggregates; results persist to `eval_runs` and
+to `reports/<run_id>.json`.
 
 ## 5. Practical exercise
 Turn a real failure into a case (the course’s canonical exercise):

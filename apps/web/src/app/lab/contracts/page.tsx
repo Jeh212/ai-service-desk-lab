@@ -13,7 +13,7 @@ export default function ContractsPage() {
     <div className="space-y-4">
       <PageHeader
         title="Contracts Explorer"
-        subtitle="Real Pydantic JSON Schemas with valid / invalid examples."
+        subtitle="Real Zod JSON Schemas with valid / invalid examples."
       />
       {loading && <p className="text-sm text-muted">Loading…</p>}
       {data && (

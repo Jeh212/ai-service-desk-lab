@@ -14,12 +14,12 @@ through the prompt — then prove the fix with evaluation.
   are the guardrail.
 
 ## 3. Files involved
-- `app/ai/prompts/library.py` — versioned prompts, few-shot, builders.
-- `app/ai/intents/definitions.py` — the semantic intent descriptions (versioned).
-- `app/ai/intents/heuristics.py` — the mock’s deterministic stand-in for a model.
+- `src/ai/prompts.ts` — versioned prompts, few-shot, builders.
+- `src/ai/prompt-data.json` — the semantic intent descriptions (versioned).
+- `src/ai/intents.ts` — the mock’s deterministic stand-in for a model.
 
 ## 4. How the flow works
-`Orchestrator._classify` calls `library.build_classification_messages(text,
+`Orchestrator.classify` calls `classificationMessages(text,
 version)`. The **Prompt Playground** lets you run two system-prompt versions on
 the same input, side by side, and compare intent, state and the trace.
 
@@ -27,8 +27,8 @@ the same input, side by side, and compare intent, state and the trace.
 Reproduce and fix the classic confusion:
 1. In the Playground, run *“I want to cancel now but first, how does it work?”*
    with `system-v2`. It should resolve to `cancellation_info` (safe).
-2. Edit `definitions_for_prompt`/the classifier template to sharpen the
-   info-vs-action rule, bump to a `classify-v3`, and wire it in.
+2. Edit `src/ai/prompt-data.json` and the classifier template to sharpen the
+   info-vs-action rule, bump to a `classify-v3`, and update the allowed versions in `src/app.ts` and the CLI.
 3. Add a new dataset case capturing the behaviour you want, then `make eval`.
 
 ## 6. How to run it

@@ -22,7 +22,7 @@ engineering, observability and failure boundaries.
 Browser (Next.js)
    │  bearer session token (issued by backend, never a client-asserted id)
    ▼
-FastAPI  ──►  Orchestrator ──►  Intent classifier ──►  Tool dispatcher ──►  Domain services
+Fastify  ──►  Orchestrator ──►  Intent classifier ──►  Tool dispatcher ──►  Domain services
    │               │                   │                      │                    │
    │               │                   │                      │                    ▼
    │               │                   │                      │             MongoDB (source of truth)
@@ -50,21 +50,16 @@ cannot call. A cancellation *question* can never reach the cancellation tool.
 | Layer     | Choice                                                            |
 |-----------|-------------------------------------------------------------------|
 | Frontend  | Next.js 14 (App Router), TypeScript strict, Tailwind, Zod         |
-| Backend   | Python 3.12, FastAPI, Pydantic v2, PyMongo **async**              |
+| Backend   | Node.js 22+, TypeScript strict, Fastify 5, Zod, MongoDB driver              |
 | Database  | MongoDB 7 (Docker, persistent volume)                             |
-| LLM       | `GroqLLMProvider` (official `groq` SDK) + `MockLLMProvider`       |
-| Tooling   | uv, Ruff, Pytest                                                  |
+| LLM       | `GroqLLMProvider` (official `groq-sdk`) + `MockLLMProvider`       |
+| Tooling   | npm, TypeScript, Prettier, Node test runner                                                  |
 
-### Why MongoDB + PyMongo (not Prisma / SQLite)
+### MongoDB with the official Node.js driver
 
-- **MongoDB local** is the source of truth, accessed from Python with **PyMongo
-  Async** — no extra Node.js layer just to reach the database.
-- **Prisma’s Python client is deprecated/unmaintained**, so it is *not* used in
-  the core. Prisma could be added later purely as an optional, separate study
-  module; it is not part of this architecture.
-- **SQLite** would be simpler but misses the document model, multi-tenant
-  querying and indexing patterns the labs teach. It remains a reasonable
-  alternative for a single-file variant.
+MongoDB remains the source of truth. The TypeScript API uses its official driver
+and keeps the existing collection names, snake_case fields and ISO date strings.
+No data conversion is required for users, subscriptions, policies or proposals.
 
 The repository code uses a thin `DocStore` abstraction with two backends —
 `MongoStore` (real) and `MemoryStore` (offline tests/evals) — so the identical
@@ -75,8 +70,7 @@ service code runs in both.
 ## Prerequisites
 
 - Docker (Desktop or Engine)
-- Python managed by [uv](https://docs.astral.sh/uv/) (the Makefile uses `uv`)
-- Node.js 18+ and npm
+- Node.js 22+ and npm (`nvm use` selects the repository version)
 
 ## Quick start
 
@@ -84,7 +78,7 @@ service code runs in both.
 # 0) from the repo root
 cp .env.example .env            # defaults work offline (LLM_PROVIDER=mock)
 
-# 1) install deps (backend via uv, frontend via npm)
+# 1) install deps (backend and frontend via npm)
 make install
 
 # 2) start MongoDB
@@ -127,11 +121,11 @@ hardcoded.
 | `make up`      | Start MongoDB (Docker)                                     |
 | `make seed`    | Idempotent demo data                                       |
 | `make reset`   | Clear collections and re-seed                             |
-| `make api`     | FastAPI with reload on :8000                               |
+| `make api`     | Fastify with reload on :8000                               |
 | `make web`     | Next.js dev server on :3000                                |
 | `make test`    | Backend tests (offline, mock provider, **no API key**)    |
 | `make eval`    | Run evaluations — `make eval PROVIDER=groq` for real runs  |
-| `make lint`    | Ruff check/format + frontend typecheck                    |
+| `make lint`    | TypeScript + Prettier + frontend typecheck                    |
 | `make down`    | Stop containers                                            |
 
 Mongo UI (optional): `docker compose --profile tools up -d mongo-express` → http://localhost:8081
@@ -164,7 +158,7 @@ With the stack running and seeded, you can:
 
 ## What is implemented vs planned
 
-**Implemented and tested** (offline, mock provider, 50 passing tests + a 27-case
+**Implemented and tested** (offline, mock provider, 61 passing offline tests + a 27-case
 eval at 100% on mock, and verified live against MongoDB):
 chat + confirmation flow, intent classification, AI contracts, tool registry &
 dispatcher with full guard rails, deterministic cancellation (idempotent,
@@ -188,7 +182,7 @@ stored datasets. See `docs/learning/` roadmaps.
 ```
 ai-service-desk-lab/
 ├── apps/
-│   ├── api/   FastAPI backend (app/ + tests/)
+│   ├── api/   TypeScript/Fastify backend (src/ + test/)
 │   └── web/   Next.js frontend (src/)
 ├── datasets/  versioned evaluation datasets (JSON)
 ├── docs/learning/  Lab 01–08 study guides
@@ -196,8 +190,8 @@ ai-service-desk-lab/
 ├── docker-compose.yml, .env.example, Makefile
 ```
 
-See `apps/api/README.md` for backend specifics and `docs/learning/` for the
-guided labs.
+See `apps/api/README.md` for backend specifics, `docs/migration-typescript.md`
+for migration compatibility notes, and `docs/learning/` for guided labs.
 
 ## Troubleshooting
 
@@ -207,4 +201,3 @@ guided labs.
 - **Groq errors** → check `GROQ_API_KEY` and model availability; the app falls
   back safely and you can always switch `LLM_PROVIDER=mock`.
 - **Frontend can’t reach API** → set `NEXT_PUBLIC_API_BASE` in `apps/web/.env.local`.
-# ai-service-desk-lab
